@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\ytd]
+@="URL:YouTube Downloader"
+"URL Protocol"=""
+
+[HKEY_CLASSES_ROOT\ytd\shell\open\command]
+@="powershell -ExecutionPolicy Bypass -Command \"cd ~; python 'C:\\Users\\Manoj\\ytd_protocol\\ytd.py' '%1'\""
