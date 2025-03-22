@@ -1,5 +1,4 @@
 (function () {
-  // Function to display the popup
   function displayPopup(url) {
     // creating a background to make the popup popout XD
     const bg = document.createElement("div");
@@ -94,53 +93,77 @@
       bg.remove();
     }
   }
-  // Function to add the custom button
   function addCustomButton() {
-    // Find the container where the button should be placed
-    const container = document.querySelector("#flexible-item-buttons");
-    if (!container) return;
+    console.log("1. Custom button added");
 
-    // Find if the existing download button is present and hide it
-    const existingButton = container.querySelector("ytd-download-button-renderer");
-    if (existingButton) {
-      existingButton.style.display = "none";
-    }
+    // Find all containers where the button should be placed
+    const containers = document.querySelectorAll("#flexible-item-buttons");
+    console.log("2. containers found", containers);
 
-    // Check if the custom button already exists
-    if (document.querySelector("#custom-download-button")) {
+    if (containers.length === 0) {
+      console.log("3. No containers found");
       return;
     }
 
-    // Create the custom button
-    const customButton = document.createElement("button");
-    customButton.id = "custom-download-button";
-    customButton.textContent = "YTD-Download"; // Change to your desired text
+    containers.forEach((container, index) => {
+      console.log(`4. Checking container ${index + 1}`, container);
 
-    // Add a click event to trigger the download
-    customButton.onclick = function () {
-      const videoUrl = window.location.href;
-      displayPopup(videoUrl);
-    };
+      // Ensure the container is visible (active container)
+      if (container.offsetParent === null) {
+        console.log(`5. Container ${index + 1} is hidden`);
+        return;
+      }
 
-    // Insert the custom button after the default download button, if any
-    if (existingButton) {
-      container.insertBefore(customButton, existingButton.nextSibling);
-    } else {
-      container.appendChild(customButton); // If no default button, add it at the end
-    }
+      // Find if the existing download button is present and hide it
+      const existingButton = container.querySelector("ytd-download-button-renderer");
+      console.log(`6. existingButton in container ${index + 1}`, existingButton);
+
+      if (existingButton) {
+        console.log(`7. Hiding default download button in container ${index + 1}`);
+        existingButton.style.display = "none";
+      }
+
+      // Check if the custom button already exists in this container
+      if (container.querySelector("#custom-download-button")) {
+        console.log(`8. Custom button already exists in container ${index + 1}`);
+        return;
+      }
+
+      // Create the custom button
+      const customButton = document.createElement("button");
+      customButton.id = "custom-download-button";
+      customButton.textContent = "YTD-Download"; // Change to your desired text
+
+      // Add a click event to trigger the download
+      customButton.onclick = function () {
+        const videoUrl = window.location.href;
+        displayPopup(videoUrl);
+      };
+
+      // Insert the custom button after the default download button, if any
+      if (existingButton) {
+        console.log(
+          `9. Inserting custom button after default download button in container ${index + 1}`
+        );
+        container.insertBefore(customButton, existingButton.nextSibling);
+      } else {
+        console.log(`10. Inserting custom button at the end of container ${index + 1}`);
+        container.appendChild(customButton); // If no default button, add it at the end
+      }
+    });
   }
 
   // Set up MutationObserver to watch for changes in the DOM
   const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.addedNodes.length > 0) {
-        addCustomButton(); // Add button when necessary nodes are added
-      }
-    });
+    addCustomButton();
   });
 
   observer.observe(document.body, { childList: true, subtree: true });
 
-  // Add the button initially
   addCustomButton();
+
+  document.addEventListener("yt-navigate-finish", () => {
+    console.log("Navigation detected! Reapplying changes...");
+    setTimeout(addCustomButton, 500); // Wait a bit before modifying
+  });
 })();
