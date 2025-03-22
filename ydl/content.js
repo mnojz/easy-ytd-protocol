@@ -96,36 +96,49 @@
   function addCustomButton() {
     console.log("1. Custom button added");
 
-    // Find all containers where the button should be placed
+    // Check if we are on a video page by checking the current URL (for video pages it contains 'watch')
+    if (!window.location.href.includes("watch")) {
+      console.log("2. Not on a video page, skipping...");
+      const customButtons = document.querySelectorAll("#custom-download-button");
+      if (customButtons.length > 0) {
+        customButtons.forEach((button) => {
+          console.log("3. Custom button found, removing...");
+          button.remove(); // Remove each instance of the button
+        });
+      }
+      return; // Exit if we are not on a video page (e.g., homepage, recommendations)
+    }
+
+    // Find all containers where the button should be placed (only for video player)
     const containers = document.querySelectorAll("#flexible-item-buttons");
-    console.log("2. containers found", containers);
+    console.log("3. containers found", containers);
 
     if (containers.length === 0) {
-      console.log("3. No containers found");
+      console.log("4. No containers found");
       return;
     }
 
     containers.forEach((container, index) => {
-      console.log(`4. Checking container ${index + 1}`, container);
+      console.log(`5. Checking container ${index + 1}`, container);
 
       // Ensure the container is visible (active container)
       if (container.offsetParent === null) {
-        console.log(`5. Container ${index + 1} is hidden`);
+        console.log(`6. Container ${index + 1} is hidden`);
         return;
       }
 
       // Find if the existing download button is present and hide it
       const existingButton = container.querySelector("ytd-download-button-renderer");
-      console.log(`6. existingButton in container ${index + 1}`, existingButton);
+      console.log(`7. existingButton in container ${index + 1}`, existingButton);
 
       if (existingButton) {
-        console.log(`7. Hiding default download button in container ${index + 1}`);
+        console.log(`8. Hiding default download button in container ${index + 1}`);
         existingButton.style.display = "none";
       }
 
       // Check if the custom button already exists in this container
       if (container.querySelector("#custom-download-button")) {
-        console.log(`8. Custom button already exists in container ${index + 1}`);
+        console.log(`9. Custom button already exists in container ${index + 1}`);
         return;
       }
 
@@ -143,11 +156,11 @@
       // Insert the custom button after the default download button, if any
       if (existingButton) {
         console.log(
-          `9. Inserting custom button after default download button in container ${index + 1}`
+          `10. Inserting custom button after default download button in container ${index + 1}`
         );
         container.insertBefore(customButton, existingButton.nextSibling);
       } else {
-        console.log(`10. Inserting custom button at the end of container ${index + 1}`);
+        console.log(`11. Inserting custom button at the end of container ${index + 1}`);
         container.appendChild(customButton); // If no default button, add it at the end
       }
     });
