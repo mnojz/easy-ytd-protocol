@@ -1,182 +1,110 @@
 (function () {
   function displayPopup(url) {
-    // creating a background to make the popup popout XD
+    // Create background and popup elements in a single step
     const bg = document.createElement("div");
     bg.id = "popup-bg";
-    document.body.appendChild(bg);
-
-    // creating the popup box
     const popup = document.createElement("div");
     popup.id = "popup-box";
     bg.appendChild(popup);
+    document.body.appendChild(bg);
 
-    // creating the top header containing title and icon
+    // Create and append header with icon and title
     const header = document.createElement("div");
     header.id = "popup-header";
-    popup.appendChild(header);
-
-    // creating icon
-    const yticon = document.createElement("img");
+    const yticon = document.createElement("div");
     yticon.id = "popup-icon";
-    yticon.src = "https://prowise-acc.hosted-temp.com/content/uploads/2023/06/logo-youtube.png";
-    header.appendChild(yticon);
-
-    // creating the title text
+    yticon.style.backgroundImage =
+      "url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20version%3D%221.1%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2230px%22%20height%3D%2230px%22%20viewBox%3D%220%200%2024%2024%22%20enable-background%3D%22new%200%200%2024%2024%22%20xml%3Aspace%3D%22preserve%22%20focusable%3D%22false%22%20aria-hidden%3D%22true%22%20style%3D%22pointer-events%3A%20none%3B%20display%3A%20inherit%3B%20width%3A%20100%25%3B%20height%3A%20100%25%3B%22%3E%3Cg%3E%3Cpath%20fill%3D%22%23FF0033%22%20d%3D%22M21.58%2C7.19c-0.23-0.86-0.91-1.54-1.77-1.77C18.25%2C5%2C12%2C5%2C12%2C5S5.75%2C5%2C4.19%2C5.42%20C3.33%2C5.65%2C2.65%2C6.33%2C2.42%2C7.19C2%2C8.75%2C2%2C12%2C2%2C12s0%2C3.25%2C0.42%2C4.81c0.23%2C0.86%2C0.91%2C1.54%2C1.77%2C1.77C5.75%2C19%2C12%2C19%2C12%2C19%20s6.25%2C0%2C7.81-0.42c0.86-0.23%2C1.54-0.91%2C1.77-1.77C22%2C15.25%2C22%2C12%2C22%2C12S22%2C8.75%2C21.58%2C7.19z%22%3E%3C%2Fpath%3E%3Cpolygon%20fill%3D%22%23FFFFFF%22%20points%3D%2210%2C15%2015%2C12%2010%2C9%20%22%3E%3C%2Fpolygon%3E%3C%2Fg%3E%3C%2Fsvg%3E')";
+    yticon.style.backgroundSize = "cover";
     const dwntitle = document.createElement("div");
     dwntitle.id = "popup-title";
     dwntitle.textContent = "Download Video";
+    header.appendChild(yticon);
     header.appendChild(dwntitle);
+    popup.appendChild(header);
 
-    // creating the input field to select formats
+    // Create format selection and checkboxes
     const formatSelection = document.createElement("div");
     formatSelection.id = "popup-format-selection";
     popup.appendChild(formatSelection);
 
-    //creating the box containing checkbox and label
-    const formatBox = document.createElement("div");
-    formatBox.className = "popup-format-box";
-    formatSelection.appendChild(formatBox);
+    const formats = [
+      { id: "audio-only-checkbox", label: "Audio Only", checked: false },
+      { id: "video-checkbox", label: "Video", checked: true },
+    ];
 
-    //creating the checkbox
-    const checkbox = document.createElement("input");
-    checkbox.id = "audio-only-checkbox";
-    checkbox.type = "checkbox";
-    checkbox.checked = false;
-    formatBox.appendChild(checkbox);
+    formats.forEach((format) => {
+      const formatBox = document.createElement("div");
+      formatBox.className = "popup-format-box";
+      const checkbox = document.createElement("input");
+      checkbox.id = format.id;
+      checkbox.type = "checkbox";
+      checkbox.checked = format.checked;
+      const label = document.createElement("label");
+      label.textContent = format.label;
+      formatBox.appendChild(checkbox);
+      formatBox.appendChild(label);
+      formatSelection.appendChild(formatBox);
+    });
 
-    //creating the label
-    const label = document.createElement("label");
-    label.textContent = "Audio Only";
-    formatBox.appendChild(label);
-
-    //creating the box containing checkbox and label
-    const formatBox2 = document.createElement("div");
-    formatBox2.className = "popup-format-box";
-    formatSelection.appendChild(formatBox2);
-
-    //creating the checkbox
-    const checkbox2 = document.createElement("input");
-    checkbox2.id = "video-checkbox";
-    checkbox2.type = "checkbox";
-    checkbox2.checked = true;
-    formatBox2.appendChild(checkbox2);
-
-    //creating the label
-    const label2 = document.createElement("label");
-    label2.textContent = "Video";
-    formatBox2.appendChild(label2);
-
-    //dreating a download button
+    // Create download button
     const dwnbtn = document.createElement("button");
     dwnbtn.id = "popup-download-button";
     dwnbtn.textContent = "Download";
-    dwnbtn.onclick = function downloadVideo() {
-      let audioOnly = document.getElementById("audio-only-checkbox").checked;
-      let video = document.getElementById("video-checkbox").checked;
+    dwnbtn.onclick = function () {
+      const audioOnly = document.getElementById("audio-only-checkbox").checked;
+      const video = document.getElementById("video-checkbox").checked;
       if (!audioOnly && !video) {
         alert("Please select at least one format");
       } else {
-        const command = `ytd:${url}&audio=${audioOnly}&video=${video}`;
-        window.location.href = command;
+        window.location.href = `ytd:${url}&audio=${audioOnly}&video=${video}`;
         closePopup();
       }
     };
     popup.appendChild(dwnbtn);
 
-    // creating close button
+    // Create close button
     const closebtn = document.createElement("button");
     closebtn.id = "popup-close-button";
     closebtn.onclick = closePopup;
     popup.appendChild(closebtn);
 
+    // Close popup function
     function closePopup() {
       bg.remove();
     }
   }
+
   function addCustomButton() {
-    console.log("1. Custom button added");
+    if (!window.location.href.includes("watch")) return;
 
-    // Check if we are on a video page by checking the current URL (for video pages it contains 'watch')
-    if (!window.location.href.includes("watch")) {
-      console.log("2. Not on a video page, skipping...");
-      const customButtons = document.querySelectorAll("#custom-download-button");
-      if (customButtons.length > 0) {
-        customButtons.forEach((button) => {
-          console.log("3. Custom button found, removing...");
-          button.remove(); // Remove each instance of the button
-        });
-      }
-      return; // Exit if we are not on a video page (e.g., homepage, recommendations)
-    }
+    const containers = Array.from(document.querySelectorAll("#flexible-item-buttons")).filter(
+      (container) => container.children.length > 1
+    );
 
-    // Find all containers where the button should be placed (only for video player)
-    const containers = document.querySelectorAll("#flexible-item-buttons");
-    console.log("3. containers found", containers);
+    containers.forEach((container) => {
+      console.log(container);
 
-    if (containers.length === 0) {
-      console.log("4. No containers found");
-      return;
-    }
+      // Skip if custom button already exists
+      if (container.querySelector("#custom-download-button")) return;
 
-    containers.forEach((container, index) => {
-      console.log(`5. Checking container ${index + 1}`, container);
-
-      // Ensure the container is visible (active container)
-      if (container.offsetParent === null) {
-        console.log(`6. Container ${index + 1} is hidden`);
-        return;
-      }
-
-      // Find if the existing download button is present and hide it
+      // Hide default download button if exists
       const existingButton = container.querySelector("ytd-download-button-renderer");
-      console.log(`7. existingButton in container ${index + 1}`, existingButton);
-
-      if (existingButton) {
-        console.log(`8. Hiding default download button in container ${index + 1}`);
-        existingButton.style.display = "none";
-      }
-
-      // Check if the custom button already exists in this container
-      if (container.querySelector("#custom-download-button")) {
-        console.log(`9. Custom button already exists in container ${index + 1}`);
-        return;
-      }
+      if (existingButton) existingButton.style.display = "none";
 
       // Create the custom button
       const customButton = document.createElement("button");
       customButton.id = "custom-download-button";
-      customButton.textContent = "YTD-Download"; // Change to your desired text
-
-      // Add a click event to trigger the download
-      customButton.onclick = function () {
-        const videoUrl = window.location.href;
-        displayPopup(videoUrl);
-      };
-
-      // Insert the custom button after the default download button, if any
-      if (existingButton) {
-        console.log(
-          `10. Inserting custom button after default download button in container ${index + 1}`
-        );
-        container.insertBefore(customButton, existingButton.nextSibling);
-      } else {
-        console.log(`11. Inserting custom button at the end of container ${index + 1}`);
-        container.appendChild(customButton); // If no default button, add it at the end
-      }
+      customButton.textContent = "YTD-Download";
+      customButton.onclick = () => displayPopup(window.location.href);
+      container.insertBefore(customButton, container.firstChild);
     });
   }
 
-  // Set up MutationObserver to watch for changes in the DOM
-  const observer = new MutationObserver((mutations) => {
-    addCustomButton();
-  });
-
+  // Use MutationObserver to watch for changes in the DOM
+  const observer = new MutationObserver(() => addCustomButton());
   observer.observe(document.body, { childList: true, subtree: true });
 
+  // Initial call to add the custom button
   addCustomButton();
-
-  document.addEventListener("yt-navigate-finish", () => {
-    console.log("Navigation detected! Reapplying changes...");
-    setTimeout(addCustomButton, 500); // Wait a bit before modifying
-  });
 })();

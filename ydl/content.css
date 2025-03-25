@@ -31,8 +31,10 @@
 
 #popup-icon {
   height: 30px;
-  width: auto;
+  width: 50px;
   margin-right: 8px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 #popup-title {
