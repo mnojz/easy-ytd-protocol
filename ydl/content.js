@@ -81,9 +81,8 @@
     const containers = Array.from(document.querySelectorAll("#flexible-item-buttons")).filter(
       (container) => container.children.length > 1
     );
-
     containers.forEach((container) => {
-      console.log(container);
+      console.log("container found", count++);
 
       // Skip if custom button already exists
       if (container.querySelector("#custom-download-button")) return;
@@ -95,16 +94,39 @@
       // Create the custom button
       const customButton = document.createElement("button");
       customButton.id = "custom-download-button";
-      customButton.textContent = "YTD-Download";
+      customButton.textContent = "Download";
       customButton.onclick = () => displayPopup(window.location.href);
       container.insertBefore(customButton, container.firstChild);
     });
   }
 
-  // Use MutationObserver to watch for changes in the DOM
-  const observer = new MutationObserver(() => addCustomButton());
-  observer.observe(document.body, { childList: true, subtree: true });
+  function waitForElement(selector) {
+    return new Promise((resolve) => {
+      const observer = new MutationObserver(() => {
+        const el = document.querySelector(selector); // Using querySelector for more specific selection
+        if (el) {
+          observer.disconnect();
+          resolve(el);
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    });
+  }
 
+  // Wait for the specific element (inside a parent, or based on other criteria)
+  waitForElement(
+    "#above-the-fold #top-row #actions #actions-inner #menu .style-scope #flexible-item-buttons"
+  ).then((targetElement) => {
+    console.log(targetElement);
+    // Select a deeper nested element, for example:
+    const nestedElement = targetElement.querySelector(".nested-class"); // Adjust based on your structure
+    new MutationObserver(() => addCustomButton()).observe(nestedElement, {
+      childList: true,
+      subtree: true,
+    });
+  });
+
+  count = 1;
   // Initial call to add the custom button
   addCustomButton();
 })();

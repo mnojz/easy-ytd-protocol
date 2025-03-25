@@ -147,3 +147,7 @@
   margin-left: 8px;
   cursor: pointer;
 }
+
+#custom-download-button:hover {
+  background-color: #ffffff33;
+}
