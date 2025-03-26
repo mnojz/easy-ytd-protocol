@@ -36,15 +36,27 @@
     formats.forEach((format) => {
       const formatBox = document.createElement("div");
       formatBox.className = "popup-format-box";
+
       const checkbox = document.createElement("input");
       checkbox.id = format.id;
       checkbox.type = "checkbox";
       checkbox.checked = format.checked;
+
       const label = document.createElement("label");
       label.textContent = format.label;
+
+      // Append checkbox and label to the formatBox
       formatBox.appendChild(checkbox);
       formatBox.appendChild(label);
       formatSelection.appendChild(formatBox);
+
+      // Add click event listener to toggle the checkbox
+      formatBox.addEventListener("click", (event) => {
+        // Prevent toggling if the click is directly on the checkbox
+        if (event.target !== checkbox) {
+          checkbox.checked = !checkbox.checked;
+        }
+      });
     });
 
     // Create download button
@@ -82,8 +94,6 @@
       (container) => container.children.length > 1
     );
     containers.forEach((container) => {
-      console.log("container found", count++);
-
       // Skip if custom button already exists
       if (container.querySelector("#custom-download-button")) return;
 
@@ -100,33 +110,9 @@
     });
   }
 
-  function waitForElement(selector) {
-    return new Promise((resolve) => {
-      const observer = new MutationObserver(() => {
-        const el = document.querySelector(selector); // Using querySelector for more specific selection
-        if (el) {
-          observer.disconnect();
-          resolve(el);
-        }
-      });
-      observer.observe(document.body, { childList: true, subtree: true });
-    });
-  }
+  const observer = new MutationObserver(addCustomButton);
+  observer.observe(document.body, { childList: true, subtree: true });
 
-  // Wait for the specific element (inside a parent, or based on other criteria)
-  waitForElement(
-    "#above-the-fold #top-row #actions #actions-inner #menu .style-scope #flexible-item-buttons"
-  ).then((targetElement) => {
-    console.log(targetElement);
-    // Select a deeper nested element, for example:
-    const nestedElement = targetElement.querySelector(".nested-class"); // Adjust based on your structure
-    new MutationObserver(() => addCustomButton()).observe(nestedElement, {
-      childList: true,
-      subtree: true,
-    });
-  });
-
-  count = 1;
   // Initial call to add the custom button
   addCustomButton();
 })();

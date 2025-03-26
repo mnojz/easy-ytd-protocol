@@ -59,6 +59,9 @@
   background: #ffffff1a;
   border-radius: 8px;
   padding: 8px;
+  &:hover {
+    background-color: #ffffff33;
+  }
 }
 
 .popup-format-box input {
