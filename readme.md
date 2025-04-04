@@ -55,8 +55,8 @@ now ytpe `ffmpeg -version` if you are getting long text starting with version in
 clone this repository you will get 2 folders inside `ydl` and `ydl_protocol` ydl one is unpacked browser extension
 ydl_protocol one is consist of both registry file and downloader python script
 
-we have to place the `ytd_protocol` folder inside home directory.
-press `WIN+R` and enter `%userprofile%` and you have to put the ytd_protocol folder in that directory. then open the ytd_protol folder open ytd.reg file with notepad or any of your favorite code editor. you have to edit the path to ytd.py file you need to set the \<userprofile> to your own user directory name. now run the ytd.reg file click ok if prompted.
+we have to place the `ytd_protocol` folder inside root directory.
+you have to put the ytd_protocol folder in `c:\` directory. now run the ytd.reg file click ok if prompted.
 
 to check if it is working or not, open browser and put ytd: in url bar if terminal window is opening it is working.
 
@@ -67,6 +67,5 @@ copy the ytd folder to your desired location, open browser, goto extension page 
 to check goto youtube open any video or song, refresh the video page, now ytd-download button will appear next to share button click on it and click on download,
 
 if video is downloading congratulation,
-otherwise, throw everything you just did to garbage, and go for better tools like stacher.io for downloading not only youtube but many other websites easily,
+otherwise, you made mistake at some point, either try again or go for better tools like stacher.io for downloading it works not only on youtube but many other websites easily,
 
-browser extension is under construction so you might need to refresh the page if ytd-download button is not showing
