@@ -1,3 +1,4 @@
+import os
 import sys
 import yt_dlp
 import subprocess
@@ -11,8 +12,9 @@ def clean_url(url):
     return url
 
 def downloadAudio(url):
+    download_dir = os.path.join(os.path.expanduser('~'), 'Downloads', '%(title)s_audio.%(ext)s')
     ydl_opts = {
-        'outtmpl': 'C:\\Users\\Manoj\\Downloads\\%(title)s_audio.%(ext)s',
+        'outtmpl': download_dir,
         'format': 'bestaudio',
         'extract-audio': True,
         'audio-format': 'mp3',
@@ -21,8 +23,9 @@ def downloadAudio(url):
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])        
 def downloadVideo(url):
+    download_dir = os.path.join(os.path.expanduser('~'), 'Downloads', '%(title)s_video.%(ext)s')
     ydl_opts = {
-        'outtmpl': 'C:\\Users\\Manoj\\Downloads\\%(title)s.%(ext)s',
+        'outtmpl': download_dir,
         'format': 'bestvideo[height<=1080]+bestaudio/best[ext=mp4]', 
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -65,10 +68,10 @@ def main():
         except Exception as e:
             print(f"Error: {e}")
 
-    input("Press Enter to continue...")
+    # input("Press Enter to continue...")
 
-    command = "cd C:\\Users\\Manoj\\Downloads && explorer ."
-    subprocess.run(command, shell=True)
+    downloads_dir = os.path.expanduser('~\\Downloads')
+    subprocess.run(f'cd "{downloads_dir}" && explorer .', shell=True)
     
     sys.exit(0)
 
