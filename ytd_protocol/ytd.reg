@@ -5,4 +5,4 @@ Windows Registry Editor Version 5.00
 "URL Protocol"=""
 
 [HKEY_CLASSES_ROOT\ytd\shell\open\command]
-@="powershell -ExecutionPolicy Bypass -Command \"cd ~; python 'C:\\ytd_protocol\\ytd.py' '%1'\""
+@="powershell -ExecutionPolicy Bypass -Command \"cd $env:USERPROFILE\\Downloads; python 'C:\\ytd_protocol\\ytd.py' '%1'\""

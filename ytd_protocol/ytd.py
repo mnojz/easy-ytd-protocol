@@ -5,23 +5,32 @@ import subprocess
 from urllib.parse import parse_qs, urlparse, urlunparse
 
 def clean_url(url):
-    query_pos = url.find('&')    
+    # Step 1: Remove the 'ytd:' prefix
+    if url.startswith("ytd:"):
+        url = url[4:]
+
+    # Step 2: Find the position of '&' and slice the URL up to that point
+    query_pos = url.find('&')
     if query_pos != -1:
-        url = url[:query_pos]
+        url = url[:query_pos]  # Only keep the part before the first '&'
     
     return url
+
 
 def downloadAudio(url):
     download_dir = os.path.join(os.path.expanduser('~'), 'Downloads', '%(title)s_audio.%(ext)s')
     ydl_opts = {
         'outtmpl': download_dir,
-        'format': 'bestaudio',
-        'extract-audio': True,
-        'audio-format': 'mp3',
-        'audio-quality': 0,
+        'format': 'bestaudio',        
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '0',
+        }]
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])        
+
 def downloadVideo(url):
     download_dir = os.path.join(os.path.expanduser('~'), 'Downloads', '%(title)s_video.%(ext)s')
     ydl_opts = {
@@ -33,16 +42,18 @@ def downloadVideo(url):
 
 def main():    
     if len(sys.argv) > 1:
-        url = sys.argv[1][4:]
+        url = sys.argv[1]
+        if url.startswith("ytd://"):
+            url = url[4:]
     else:
         print("No URL received!")
-        return
+        sys.exit(1)
 
     parsed_url = urlparse(url)
     query_params = parse_qs(parsed_url.query)
     
-    audio_only = query_params.get("audio", ["false"])[0].lower() == "true"
-    video = query_params.get("video", ["false"])[0].lower() == "true"
+    audio_only = query_params.get("audio", ["false"])[0].strip().lower() == "true"
+    video = query_params.get("video", ["false"])[0].strip().lower() == "true"
 
     print(f"Audio Only: {audio_only}")
     print(f"Video: {video}")
@@ -51,28 +62,27 @@ def main():
     print(f"Cleaned URL: {url}")
 
     # Download based on flags
-    if audio_only and video:
-        try:
+    try:
+        if audio_only and video:
             downloadVideo(url)
             downloadAudio(url)
-        except Exception as e:
-            print(f"Error: {e}")
-    elif audio_only:
-        try:
+        elif audio_only:
             downloadAudio(url)
-        except Exception as e:
-            print(f"Error: {e}")
-    elif video:
-        try:
+        elif video:
             downloadVideo(url)
-        except Exception as e:
-            print(f"Error: {e}")
-
-    # input("Press Enter to continue...")
+    except yt_dlp.DownloadError as e:
+        print(f"Download error: {e}")
+        input("Press Enter to continue...")
+        sys.exit(1)
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        input("Press Enter to continue...")
+        sys.exit(1)
 
     downloads_dir = os.path.expanduser('~\\Downloads')
-    subprocess.run(f'cd "{downloads_dir}" && explorer .', shell=True)
+    subprocess.run(["explorer", downloads_dir])
     
+    input("Press Enter to continue...")
     sys.exit(0)
 
 if __name__ == "__main__":
