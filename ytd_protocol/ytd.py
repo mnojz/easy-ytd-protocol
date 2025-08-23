@@ -35,10 +35,12 @@ def downloadVideo(url):
     download_dir = os.path.join(os.path.expanduser('~'), 'Downloads', '%(title)s_video.%(ext)s')
     ydl_opts = {
         'outtmpl': download_dir,
-        'format': 'bestvideo[height<=1080]+bestaudio/best[ext=mp4]', 
+        'format': 'bestvideo[height<=1080][height>=720]+bestaudio/bestvideo[height<=1080]+bestaudio/best',
+        'merge_output_format': 'mp4',  # ensures proper muxing
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
+
 
 def main():    
     if len(sys.argv) > 1:
@@ -80,9 +82,9 @@ def main():
         sys.exit(1)
 
     downloads_dir = os.path.expanduser('~\\Downloads')
-    subprocess.run(["explorer", downloads_dir])
+    # subprocess.run(["explorer", downloads_dir])
     
-    input("Press Enter to continue...")
+    # input("Press Enter to continue...")
     sys.exit(0)
 
 if __name__ == "__main__":
