@@ -23,39 +23,45 @@
     header.appendChild(dwntitle);
     popup.appendChild(header);
 
-    // Create format selection and checkboxes
+    // Create format selection and radio buttons
     const formatSelection = document.createElement("div");
     formatSelection.id = "popup-format-selection";
     popup.appendChild(formatSelection);
 
     const formats = [
-      { id: "audio-only-checkbox", label: "Audio Only", checked: false },
-      { id: "video-checkbox", label: "Video", checked: true },
+      { id: "4k-radio", common: "UHD", label: "2160p (4k)", checked: false },
+      { id: "2k-radio", common: "QHD", label: "1440p (2k)", checked: false },
+      { id: "1k-radio", common: "FHD", label: "1080p", checked: true },
+      { id: "72-radio", common: "HD", label: "720p", checked: false },
+      { id: "48-radio", common: "SD", label: "480p", checked: false },
+      { id: "au-radio", common: "Audio", label: "mp3", checked: false },
     ];
 
     formats.forEach((format) => {
       const formatBox = document.createElement("div");
       formatBox.className = "popup-format-box";
 
-      const checkbox = document.createElement("input");
-      checkbox.id = format.id;
-      checkbox.type = "checkbox";
-      checkbox.checked = format.checked;
+      const radio = document.createElement("input");
+      radio.id = format.id;
+      radio.type = "radio";
+      radio.name = "mediaFormat";
+      radio.checked = format.checked;
 
       const label = document.createElement("label");
       label.textContent = format.label;
 
-      // Append checkbox and label to the formatBox
-      formatBox.appendChild(checkbox);
+      const common = document.createElement("span");
+      common.textContent = format.common;
+
+      // Append radio and label to the formatBox
+      formatBox.appendChild(radio);
       formatBox.appendChild(label);
+      formatBox.appendChild(common);
       formatSelection.appendChild(formatBox);
 
-      // Add click event listener to toggle the checkbox
+      // Add click event listener to toggle the radio
       formatBox.addEventListener("click", (event) => {
-        // Prevent toggling if the click is directly on the checkbox
-        if (event.target !== checkbox) {
-          checkbox.checked = !checkbox.checked;
-        }
+        radio.checked = true;
       });
     });
 
@@ -63,16 +69,13 @@
     const dwnbtn = document.createElement("button");
     dwnbtn.id = "popup-download-button";
     dwnbtn.textContent = "Download";
+
     dwnbtn.onclick = function () {
-      const audioOnly = document.getElementById("audio-only-checkbox").checked;
-      const video = document.getElementById("video-checkbox").checked;
-      if (!audioOnly && !video) {
-        alert("Please select at least one format");
-      } else {
-        window.location.href = `ytd:${url}&audio=${audioOnly}&video=${video}`;
-        closePopup();
-      }
+      const selected = document.querySelector("input[name='mediaFormat']:checked").id;
+      window.location.href = `ytd:${url}&format=${selected}`;
+      closePopup();
     };
+
     popup.appendChild(dwnbtn);
 
     // Create close button
@@ -90,9 +93,7 @@
   function addCustomButton() {
     if (!window.location.href.includes("watch")) return;
 
-    const containers = Array.from(document.querySelectorAll("#flexible-item-buttons")).filter(
-      (container) => container.children.length > 1
-    );
+    const containers = Array.from(document.querySelectorAll("#flexible-item-buttons")).filter((container) => container.children.length > 1);
     containers.forEach((container) => {
       // Skip if custom button already exists
       if (container.querySelector("#custom-download-button")) return;
