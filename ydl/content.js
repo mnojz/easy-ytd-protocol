@@ -46,6 +46,7 @@
       radio.type = "radio";
       radio.name = "mediaFormat";
       radio.checked = format.checked;
+      radio.dataset.format = format.common;
 
       const label = document.createElement("label");
       label.textContent = format.label;
@@ -71,7 +72,7 @@
     dwnbtn.textContent = "Download";
 
     dwnbtn.onclick = function () {
-      const selected = document.querySelector("input[name='mediaFormat']:checked").id;
+      const selected = document.querySelector("input[name='mediaFormat']:checked").dataset.format;
       window.location.href = `ytd:${url}&format=${selected}`;
       closePopup();
     };
