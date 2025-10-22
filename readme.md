@@ -1,75 +1,125 @@
-# youtube downloader script with ytd protocol
+# YouTube Downloader Script with `ytd://` Protocol
 
-this project contains 3 things,
+This project provides a simple way to download YouTube videos using a custom URL protocol, a Python script, and a browser extension.
 
-- custom url protocol (ytd://)
-- simplified yt-dlp downloader script.
-- browser extension for download button
+It includes:
 
-## 1. ytd:// protocol
+1. **Custom URL protocol (`ytd://`)**
+2. **Python downloader script (`ytd.py`)**
+3. **Browser extension for a download button**
 
-this is custom protocol that is going to be added to windows registry inorder to function properly when `ytd:` is typed on browser url bar.
-this protocol execute a `ytd.py` script present inside `c:\ytd-protocol`.
+---
 
+## 1. `ytd://` Protocol
 
-## 2. ytd.py script
+This is a custom URL protocol that allows your browser to trigger the downloader directly.  
+When you type `ytd:` in your browser’s address bar, it will run the `ytd.py` script located in `C:\ytd-protocol`.
 
-this script contain yt-dlp library that handle all the downloading stuff, it can download all the most common formats i.e. `4k`, `2k`, `1080p`, `720p`, `480p` and `mp3` 
+---
 
-## 3. browser extension
+## 2. `ytd.py` Script
 
-this extension is supposed to inject code inside youtube page that hide the original download button and put custom download button with just download text in it with no icon. upon clicking a small popup is visible with all format options to choose we can choose any one of them. if you select option with higher resolution than that of original video the script will choose the best available format autometically.
+This Python script uses **yt-dlp** to download videos. It supports:
 
-# how to set this up
+- Video resolutions: `4K`, `2K`, `1080p`, `720p`, `480p`
+- Audio format: `MP3`
 
-## prerequisits
+The script automatically chooses the best available format if you request a higher resolution than the video provides.
 
-### 1. python installed
+---
 
-goto [python.org](https://www.python.org/) click on download and download the latest version of python.
-after download complete run the python setup check `Add to Path` option while installing
+## 3. Browser Extension
 
-### 2. yt-dlp library installed
+The extension modifies the YouTube interface:
 
-after python is completely installed, open windows terminal and type the following command
-`pip install yt-dlp`
-if it ask you to update pip do so as shown in the terminal. 
+- Hides the original download button
+- Adds a custom **Download** button (no icon)
+- Clicking it opens a small popup with format options
 
-### 3. FFMPEG installed
+| Original button                                                                                                                 | Injected button                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| ![original download button](https://raw.githubusercontent.com/mnojz/easy-ytd-protocol/refs/heads/main/screenshots/original.png) | ![injected download button](https://raw.githubusercontent.com/mnojz/easy-ytd-protocol/refs/heads/main/screenshots/injected.png) |
 
-after yt-dlp is installed install ffmpeg, you can do this in multiple ways but for simplicity i recommand using winget to install ffmpeg, open windows terminal and type the following command
-`winget install ffmpeg` if you get any problem with winget version, you can go for manual download [ffmpeg](https://github.com/BtbN/FFmpeg-Builds/releases) download the correct build for windows, 
-then extract files to somewhere safe and permanent, then add binaries to the environment variable. 
+---
 
-### before going to installation part check if everything you have done so far is working or not,
+### download popup
 
-open terminal and
-type `yt-dlp --version` if you are getting version that look like a date you are good to go
-now ytpe `ffmpeg -version` if you are getting long text starting with version info you are good to go. you may proceed to installation part, if you are getting error during above verification try getting help online.
+## ![download menu](https://raw.githubusercontent.com/mnojz/easy-ytd-protocol/refs/heads/main/screenshots/downloadMenu.png)
 
-## installation
+## Setup Guide
 
-### 1. setup ytd: protocol first
+### Prerequisites
 
-clone this repository you will get 2 folders inside `ydl` and `ydl_protocol` ydl one is unpacked browser extension
-ydl_protocol one is consist of both registry file and downloader python script
+1. **Python**
 
-we have to place the `ytd_protocol` folder inside root directory.
-you have to put the ytd_protocol folder in `c:\` directory. now run the ytd.reg file click ok if prompted.
+   - Download from [python.org](https://www.python.org/)
+   - During installation, check **Add Python to PATH**
 
-to check if it is working or not, open browser and put ytd: in url bar if terminal window is opened and closed then you are good to go. 
+2. **yt-dlp**
 
-### 2. setup browser extension
+   - Open terminal and run:
 
-copy the ytd folder to your desired location, open browser, goto manage extension page enable developer option, new options will appear now, click on load unpacked option and select the ytd folder the extension will be installed, note: this extension is for chromium based browser, firefox based browser will not support this expension.
+     ```bash
+     pip install yt-dlp
+     ```
 
-to check goto youtube open any video or song, refresh the video page, now download button with no icon inside will appear next to share button click on it and click on download,
+   - Update yt-dlp if already installed
+     ```bash
+     pip install -U yt-dlp
+     ```
+   - Update pip if prompted as shown in message.
 
-if video is downloading congratulation,
-otherwise, you made mistake at some point, either try again or go for better tools like stacher.io or cobalt.tools for downloading it works not only on youtube but many other websites easily,
+3. **FFmpeg**
+   - Easiest way:
+     ```bash
+     winget install ffmpeg
+     ```
+   - Or download manually from [FFmpeg Builds](https://github.com/BtbN/FFmpeg-Builds/releases)
+   - Extract and add the binaries to your PATH.
 
-Note: this is just a hobby project so i might not be able to fix any bugs or add features unless my mood say so. 
+### Verify installation:
 
-# have a good day. 
+```bash
+yt-dlp --version
+ffmpeg -version
+```
 
+If both commands show version info, you’re ready.
 
+## Installation
+
+1. **Set up the `ytd://` protocol**
+
+   - Clone this repository. You’ll get two folders: **ydl** (browser extension) and **ytd_protocol** (Python script + registry file).
+
+   - Move ydl_protocol folder to root directory `C:\`
+
+   - Run `ytd.reg` inside that folder and confirm any prompts.
+
+   - Test: type `ytd:` in your browser’s address bar. If a terminal briefly opens, it works.
+
+2. **Set up the browser extension**
+
+   - Copy the `ydl` folder to your desired location.
+
+   - Open your Chromium-based browser → Extensions → Enable Developer mode → Load unpacked → Select the ydl folder. extension will get installed
+
+   - Go to YouTube, open a video, refresh the page. You’ll see a Download button (without icon) next to the Share button.
+
+   - now you can download any video in any format
+---
+### conclusion
+
+**If it works congratulation 🎉** 
+
+if not, double-check the setup or use other better tools like:
+- Stacher.io (app)
+- Cobalt.tools (webapp)
+
+for hasselfree downloads.
+
+---
+
+**Note:** This is a hobby project. Bugs may exist, and new features might not be added, if you want to contribute you're welcome, if you want to fork it you are welcome again. 😎
+
+# have fun 🎈🎉
