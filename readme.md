@@ -107,6 +107,8 @@ If both commands show version info, you’re ready.
    - Go to YouTube, open a video, refresh the page. You’ll see a Download button (without icon) next to the Share button.
 
    - now you can download any video in any format
+  
+     NOTE: if you are using firefox you can download extension [here](https://addons.mozilla.org/en-US/firefox/addon/download-button-injector/)
 ---
 ### conclusion
 
@@ -123,3 +125,4 @@ for hasselfree downloads.
 **Note:** This is a hobby project. Bugs may exist, and new features might not be added, if you want to contribute you're welcome, if you want to fork it you are welcome again. 😎
 
 # have fun 🎈🎉
+
