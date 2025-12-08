@@ -122,8 +122,9 @@ for hasselfree downloads.
 
 ---
 
-**Note:** This is a hobby project. Bugs may exist, and new features might not be added, if you want to contribute you're welcome, if you dont want to share your modifications you are welcome again. 😎
+**Note:** This is a hobby project. Bugs may exist, and new features might not be added 😎
 
 # have fun 🎈🎉
+
 
 
