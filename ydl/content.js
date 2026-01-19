@@ -94,27 +94,43 @@
   function addCustomButton() {
     if (!window.location.href.includes("watch")) return;
 
-    const containers = Array.from(document.querySelectorAll("#flexible-item-buttons")).filter((container) => container.children.length > 1);
-    containers.forEach((container) => {
-      // Skip if custom button already exists
+    // Use the specific container ID you identified
+    const container = document.querySelector("#top-level-buttons-computed");
+
+    if (container) {
+      // 1. Prevent duplicate injection
       if (container.querySelector("#custom-download-button")) return;
 
       // Hide default download button if exists
       const existingButton = container.querySelector("ytd-download-button-renderer");
       if (existingButton) existingButton.style.display = "none";
 
-      // Create the custom button
+      const shareButton = container.children[1];
+      // 2. Create and insert the custom button
       const customButton = document.createElement("button");
       customButton.id = "custom-download-button";
       customButton.textContent = "Download";
       customButton.onclick = () => displayPopup(window.location.href);
-      container.insertBefore(customButton, container.firstChild);
-    });
+      // Insert the button next to the Share button
+      if (shareButton) {
+        shareButton.insertAdjacentElement("afterend", customButton);
+      } else {
+        container.appendChild(customButton);
+      }
+    }
   }
 
-  const observer = new MutationObserver(addCustomButton);
-  observer.observe(document.body, { childList: true, subtree: true });
+  // 1. Listen for YouTube's internal SPA navigation
+  window.addEventListener("yt-navigate-finish", addCustomButton);
 
-  // Initial call to add the custom button
+  // 2. Keep the observer but add 'attributes' to catch internal updates
+  const observer = new MutationObserver(addCustomButton);
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: false, // Keeping it lean to avoid performance lag
+  });
+
+  // 3. Initial call
   addCustomButton();
 })();
