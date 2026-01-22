@@ -94,43 +94,29 @@
   function addCustomButton() {
     if (!window.location.href.includes("watch")) return;
 
-    // Use the specific container ID you identified
-    const container = document.querySelector("#top-level-buttons-computed");
-
-    if (container) {
-      // 1. Prevent duplicate injection
+    const containers = Array.from(document.querySelectorAll("#flexible-item-buttons")).filter(
+      (container) => container.children.length > 1,
+    );
+    containers.forEach((container) => {
+      // Skip if custom button already exists
       if (container.querySelector("#custom-download-button")) return;
 
       // Hide default download button if exists
       const existingButton = container.querySelector("ytd-download-button-renderer");
       if (existingButton) existingButton.style.display = "none";
 
-      const shareButton = container.children[1];
-      // 2. Create and insert the custom button
+      // Create the custom button
       const customButton = document.createElement("button");
       customButton.id = "custom-download-button";
       customButton.textContent = "Download";
       customButton.onclick = () => displayPopup(window.location.href);
-      // Insert the button next to the Share button
-      if (shareButton) {
-        shareButton.insertAdjacentElement("afterend", customButton);
-      } else {
-        container.appendChild(customButton);
-      }
-    }
+      container.insertBefore(customButton, container.firstChild);
+    });
   }
 
-  // 1. Listen for YouTube's internal SPA navigation
-  window.addEventListener("yt-navigate-finish", addCustomButton);
-
-  // 2. Keep the observer but add 'attributes' to catch internal updates
   const observer = new MutationObserver(addCustomButton);
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true,
-    attributes: false, // Keeping it lean to avoid performance lag
-  });
+  observer.observe(document.body, { childList: true, subtree: true });
 
-  // 3. Initial call
+  // Initial call to add the custom button
   addCustomButton();
 })();
