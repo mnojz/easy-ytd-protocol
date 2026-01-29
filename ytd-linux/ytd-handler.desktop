@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=YTD Protocol Handler
+Type=Application
+Exec=/usr/bin/python3 /home/manoj/.local/bin/ytd.py %u
+Terminal=false
+MimeType=x-scheme-handler/ytd;
+NoDisplay=true
