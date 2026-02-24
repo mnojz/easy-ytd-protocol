@@ -13,7 +13,7 @@ It includes:
 ## 1. `ytd://` Protocol
 
 This is a custom URL protocol that allows your browser to trigger the downloader directly.  
-When you type `ytd:` in your browser’s address bar, it will run the `ytd.py` script located in `C:\ytd-protocol`.
+When you type `ytd:` in your browser’s address bar, it will run the `ytd.py` script located in `~/.local/bin/`.
 
 ---
 
@@ -51,31 +51,29 @@ The extension modifies the YouTube interface:
 ### Prerequisites
 
 1. **Python**
-
-   - Download from [python.org](https://www.python.org/)
-   - During installation, check **Add Python to PATH**
+   - on linux pyhon3 is preinstalled in most cases.
+     ```bash
+     sudo apt install python3
+     ```
 
 2. **yt-dlp**
-
-   - Open terminal and run:
+   - **yt-dlp** binary is required to be side by side of **ytd.py**
 
      ```bash
-     pip install yt-dlp
+     sudo wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O ~/.local/bin/yt-dlp && sudo chmod a+rx ~/.local/bin/yt-dlp
      ```
-
-   - Update yt-dlp if already installed
-     ```bash
-     pip install -U yt-dlp
-     ```
-   - Update pip if prompted as shown in message.
 
 3. **FFmpeg**
-   - Easiest way:
+   - For **Ubuntu** based distros.
      ```bash
-     winget install ffmpeg
+     sudo add-apt-repository ppa:ubuntuhandbook1/ffmpeg8
+     sudo apt update
+     sudo apt install ffmpeg
      ```
-   - Or download manually from [FFmpeg Builds](https://github.com/BtbN/FFmpeg-Builds/releases)
-   - Extract and add the binaries to your PATH.
+   - For **Arch** based distros.
+     ```bash
+     sudo pacman -S ffmpeg
+     ```
 
 ### Verify installation:
 
@@ -89,17 +87,20 @@ If both commands show version info, you’re ready.
 ## Installation
 
 1. **Set up the `ytd://` protocol**
+   - Ccopy ytd-handler.desktop to `~/.local/share/applications/`
+   - run this command in terminal
 
-   - Clone this repository. You’ll get two folders: **ydl** (browser extension) and **ytd_protocol** (Python script + registry file).
+     ```bash
+     xdg-mime default ytd-handler.desktop x-scheme-handler/ytd
+     ```
 
-   - Move ydl_protocol folder to root directory `C:\`
-
-   - Run `ytd.reg` inside that folder and confirm any prompts.
-
-   - Test: type `ytd:` in your browser’s address bar. If a terminal briefly opens, it works.
+   - to verify if the protocol is installed or not run this command
+     ```bash
+     xdg-mime query default x-scheme-handler/ytd
+     ```
+   - you will get result like this `ytd-handler.desktop`
 
 2. **Set up the browser extension**
-
    - Copy the `ydl` folder to your desired location.
 
    - Open your Chromium-based browser → Extensions → Enable Developer mode → Load unpacked → Select the ydl folder. extension will get installed
@@ -107,14 +108,18 @@ If both commands show version info, you’re ready.
    - Go to YouTube, open a video, refresh the page. You’ll see a Download button (without icon) next to the Share button.
 
    - now you can download any video in any format
-  
+
      NOTE: if you are using firefox you can download extension [here](https://addons.mozilla.org/en-US/firefox/addon/download-button-injector/)
+     firefox extension sometime dont inject the download button unless video page is refreshed. so chromium is recommanded.
+
 ---
+
 ### conclusion
 
-**If it works congratulation 🎉** 
+**If it works congratulation 🎉**
 
 if not, double-check the setup or use other better tools like:
+
 - Stacher.io (app)
 - Cobalt.tools (webapp)
 
@@ -125,6 +130,3 @@ for hasselfree downloads.
 **Note:** This is a hobby project. Bugs may exist, and new features might not be added 😎
 
 # have fun 🎈🎉
-
-
-
