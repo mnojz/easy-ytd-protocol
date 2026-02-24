@@ -1,7 +1,14 @@
+#!/usr/bin/env python3
+
 import os
 import sys
+import time
 import yt_dlp
+import subprocess
 from urllib.parse import parse_qs, urlparse
+
+
+NOTIFY_ID = 999
 
 def clean_url(url):
     # Remove custom prefix
@@ -27,6 +34,7 @@ def downloadMedia(url, mediaFormat):
             'outtmpl': download_dir,
             'format': 'bestaudio',
             'restrictfilenames': True,
+            'progress_hooks': [progress_hook],
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
@@ -56,10 +64,33 @@ def downloadMedia(url, mediaFormat):
             'format': fmt,
             'merge_output_format': 'mp4',
             'restrictfilenames': True,
+            'progress_hooks': [progress_hook],
         }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
+
+# progress hook implementation ------
+def progress_hook(d):
+    filename = os.path.basename(d.get('filename', 'Video'))
+    if d['status'] == 'downloading':
+        if not getattr(progress_hook, "started", False):
+            subprocess.run([
+                "notify-send",
+                "-r", str(NOTIFY_ID),
+                "Downloading...",
+                f"{filename} started downloading"
+            ])
+            progress_hook.started = True
+    elif d['status'] == 'finished':
+        subprocess.run([
+            "notify-send",
+            "-r", str(NOTIFY_ID),
+            "Download Complete",
+            f"{filename} finished!"
+        ])
+
+#progress hook implementation end ------
 
 def main():
     if len(sys.argv) <= 1:
@@ -93,9 +124,11 @@ def main():
         downloadMedia(cleaned_url, media_format)
     except yt_dlp.DownloadError as e:
         print(f"Download error: {e}")
+        input("press any key to continue ...")
         sys.exit(1)
     except Exception as e:
         print(f"Unexpected error: {e}")
+        input("press any key to continue ...")
         sys.exit(1)
 
     sys.exit(0)
