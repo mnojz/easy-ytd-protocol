@@ -87,7 +87,7 @@ If both commands show version info, you’re ready.
 ## Installation
 
 1. **Set up the `ytd://` protocol**
-   - Ccopy ytd-handler.desktop to `~/.local/share/applications/`
+   - Ccopy `ytd-handler.desktop` to `~/.local/share/applications/`
    - run this command in terminal
 
      ```bash
@@ -100,7 +100,10 @@ If both commands show version info, you’re ready.
      ```
    - you will get result like this `ytd-handler.desktop`
 
-2. **Set up the browser extension**
+2. **setup the downloader script**
+   - copy `ytd.py` to `~/.local/bin/`
+
+3. **Set up the browser extension**
    - Copy the `ydl` folder to your desired location.
 
    - Open your Chromium-based browser → Extensions → Enable Developer mode → Load unpacked → Select the ydl folder. extension will get installed
