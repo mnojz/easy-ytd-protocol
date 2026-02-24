@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=YTD
+Type=Application
+Exec=/usr/bin/python3 /home/feline/.local/bin/ytd.py %u
+StartupNotify=false
+MimeType=x-scheme-handler/ytd;
+
