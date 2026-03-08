@@ -92,11 +92,11 @@
   }
 
   function addCustomButton() {
-    if (!window.location.href.includes("watch")) return;
+    const path = window.location.pathname;
 
-    const containers = Array.from(document.querySelectorAll("#flexible-item-buttons")).filter(
-      (container) => container.children.length > 1,
-    );
+    if (!(path.startsWith("/watch") || path.startsWith("/clip"))) return;
+
+    const containers = Array.from(document.querySelectorAll("#flexible-item-buttons")).filter((container) => container.children.length > 1);
     containers.forEach((container) => {
       // Skip if custom button already exists
       if (container.querySelector("#custom-download-button")) return;
