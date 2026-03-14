@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #0000005c;
+  background-color: rgb(0, 0, 0, 0.4);
   z-index: 99998;
 }
 
@@ -16,13 +16,20 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #212121;
   border-radius: 8px;
   padding: 25px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   z-index: 99999;
+}
+
+html[darky] #popup-box {
+  background-color: #212121;
+}
+
+html[lighty] #popup-box {
+  background-color: #fff;
 }
 
 #popup-header {
@@ -39,10 +46,17 @@
 }
 
 #popup-title {
-  color: #f1f1f1;
   font-family: "Roboto", "Arial", sans-serif;
   font-weight: 500;
   font-size: 18px;
+}
+
+html[darky] #popup-title {
+  color: #f1f1f1;
+}
+
+html[lighty] #popup-title {
+  color: #0f0f0f;
 }
 
 #popup-format-selection {
@@ -52,10 +66,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  border-top: solid 2px #2e2e2e;
-  border-bottom: solid 2px #2e2e2e;
   margin: 25px 0;
   padding: 10px 0;
+}
+
+html[darky] #popup-format-selection {
+  border-top: solid 2px #2e2e2e;
+  border-bottom: solid 2px #2e2e2e;
+}
+
+html[lighty] #popup-format-selection {
+  border-top: solid 2px #ccc;
+  border-bottom: solid 2px #ccc;
 }
 
 .popup-format-box {
@@ -65,9 +87,14 @@
   height: 30px;
   border-radius: 8px;
   padding: 8px 12px;
-  &:hover {
-    background-color: #2e2e2e;
-  }
+}
+
+html[darky] .popup-format-box:hover {
+  background-color: #2e2e2e;
+}
+
+html[lighty] .popup-format-box:hover {
+  background-color: #e0e0e0;
 }
 
 /* format selection list */
@@ -79,12 +106,19 @@
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  border: 2px solid #ffffff1a;
   cursor: pointer;
   position: relative;
   transition:
     border-color 0.2s ease,
     transform 0.1s ease;
+}
+
+html[darky] .popup-format-box input {
+  border: 2px solid #ffffff1a;
+}
+
+html[lighty] .popup-format-box input {
+  border: 2px solid #00000033;
 }
 
 .popup-format-box input:hover {
@@ -95,9 +129,14 @@
   transform: scale(0.9);
 }
 
-.popup-format-box input:checked {
+html[darky] .popup-format-box input:checked {
   border-color: #3ea6ff;
   box-shadow: 0 0 6px #1e609b66;
+}
+
+html[lighty] .popup-format-box input:checked {
+  border-color: #065fd4;
+  box-shadow: 0 0 6px #2f92e966;
 }
 
 .popup-format-box input::after {
@@ -107,10 +146,16 @@
   left: 50%;
   height: 12px;
   width: 12px;
-  background: #3ea6ff;
   border-radius: 50%;
   transform: translate(-50%, -50%) scale(0);
   transition: transform 0.2s ease;
+}
+
+html[darky] .popup-format-box input::after {
+  background: #3ea6ff;
+}
+html[lighty] .popup-format-box input::after {
+  background: #065fd4;
 }
 
 .popup-format-box input:checked::after {
@@ -121,10 +166,19 @@
 
 .popup-format-box label,
 .popup-format-box span {
-  color: #f1f1f1;
   font-family: "Roboto", "Arial", sans-serif;
   font-weight: 400;
   font-size: 16px;
+}
+
+html[darky] .popup-format-box span,
+html[darky] .popup-format-box label {
+  color: #f1f1f1;
+}
+
+html[lighty] .popup-format-box span,
+html[lighty] .popup-format-box label {
+  color: #0f0f0f;
 }
 
 .popup-format-box span {
@@ -134,8 +188,6 @@
 #popup-download-button {
   height: 40px;
   width: 150px;
-  background: #3ea6ff;
-  color: #212121;
   border-radius: 20px;
   font-family: "Roboto", "Arial", sans-serif;
   font-weight: 500;
@@ -143,8 +195,21 @@
   border: none;
   cursor: pointer;
   align-self: center;
+}
+
+html[darky] #popup-download-button {
+  background: #3ea6ff;
+  color: #212121;
   &:hover {
-    filter: brightness(1.2);
+    background: #59b1ff;
+  }
+}
+
+html[lighty] #popup-download-button {
+  background: #065fd4;
+  color: #ffffff;
+  &:hover {
+    background: #0556bf;
   }
 }
 
@@ -155,36 +220,62 @@
   height: 40px;
   width: 40px;
   cursor: pointer;
-  background-color: #212121;
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22m16.192%206.344-4.243%204.242-4.242-4.242-1.414%201.414L10.535%2012l-4.242%204.242%201.414%201.414%204.242-4.242%204.243%204.242%201.414-1.414L13.364%2012l4.242-4.242z%22%20fill%3D%22%23ffffff35%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
-  background-size: 25px 25px; /* Size of the icon */
+  background-size: 25px 25px;
   background-repeat: no-repeat;
   background-position: center;
   display: inline-block;
   border-radius: 50%;
   border: none;
-  &:hover {
-    filter: brightness(1.5);
-    color: #ffffffa9;
-  }
 }
 
+/* Dark theme */
+html[darky] #popup-close-button {
+  background-color: #212121;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z' fill='%23ffffff35'/%3E%3C/svg%3E");
+}
+
+html[darky] #popup-close-button:hover {
+  filter: brightness(1.5);
+}
+
+/* Light theme */
+html[lighty] #popup-close-button {
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z' fill='%2300000050'/%3E%3C/svg%3E");
+}
+
+html[lighty] #popup-close-button:hover {
+  filter: brightness(0.75);
+}
 /* custom download button  */
 
-#custom-download-button {
+#downloadButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 8px;
   height: 36px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #f1f1f1;
   border-radius: 18px;
   border: none;
   font-family: "Roboto", "Arial", sans-serif;
   font-weight: 500;
   font-size: 14px;
   padding: 0 16px;
-  margin-left: 8px;
   cursor: pointer;
 }
 
-#custom-download-button:hover {
-  background-color: #ffffff33;
+html[darky] #downloadButton {
+  background: #ffffff1a;
+  color: #f1f1f1;
+  &:hover {
+    background-color: #403f3f;
+  }
+}
+
+html[lighty] #downloadButton {
+  background: #0000000d;
+  color: #0f0f0f;
+  &:hover {
+    background-color: #0000001a;
+  }
 }

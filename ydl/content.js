@@ -1,8 +1,25 @@
 (function () {
+  function debugLog(message, ...optionalParams) {
+    console.log(`%c${message}`, "color: cyan; font-weight: bold; font-size: 24px;", ...optionalParams);
+  }
+
+  function closePopup() {
+    const bg = document.getElementById("popup-bg");
+    if (bg) {
+      bg.remove();
+    }
+  }
+
   function displayPopup(url) {
     // Create background and popup elements in a single step
     const bg = document.createElement("div");
     bg.id = "popup-bg";
+    // Close popup when clicking on the background
+    bg.onclick = function (e) {
+      if (e.target === bg) {
+        closePopup();
+      }
+    };
     const popup = document.createElement("div");
     popup.id = "popup-box";
     bg.appendChild(popup);
@@ -84,39 +101,72 @@
     closebtn.id = "popup-close-button";
     closebtn.onclick = closePopup;
     popup.appendChild(closebtn);
+  }
 
-    // Close popup function
-    function closePopup() {
-      bg.remove();
+  const buttonSvgInnerHtml = `
+  <svg width="11" height="16" viewBox="0 0 11 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M7.58303 12.8232L9.64172 7.97294C10.7817 5.28719 11.3518 3.94433 10.768 3.32838C10.1842 2.71367 8.96505 3.37576 6.52673 4.70116C6.02209 4.97548 5.77092 5.11264 5.50025 5.11264C5.22957 5.11264 4.97727 4.97548 4.47376 4.70116C2.03546 3.37576 0.815145 2.71367 0.232519 3.32962C-0.352403 3.94433 0.218756 5.28719 1.35878 7.97418L3.41747 12.8232C4.31665 14.9404 4.76624 16.0002 5.50025 16.0002C6.23427 16.0002 6.68385 14.9417 7.58303 12.8232Z" fill="currentColor"/>
+  <path d="M6.35114 1.32617C8.37107 0.230703 9.38111 -0.316569 9.86481 0.191408C10.171 0.513732 10.0908 1.07571 9.75348 2.00879C8.97942 2.33322 7.99251 2.85492 6.73883 3.51758L6.73102 3.52149C6.12753 3.84051 5.82568 3.99992 5.50055 4C5.17389 4 4.86895 3.83953 4.26129 3.51758C3.00733 2.85477 2.01999 2.33408 1.24567 2.00977C0.908114 1.07637 0.828508 0.514091 1.13532 0.192384C1.61806 -0.316801 2.62964 0.230496 4.64997 1.32617C5.06705 1.55288 5.27632 1.66602 5.50055 1.66602C5.72373 1.6659 5.93094 1.55381 6.34528 1.3291L6.35114 1.32617Z" fill="currentColor"/>
+  </svg>
+  `;
+
+  function createButton(container) {
+    debugLog("Container found, creating button", container);
+    if (container) {
+      const buttonLikeDislikeSegment = container.querySelector("segmented-like-dislike-button-view-model");
+      if (buttonLikeDislikeSegment) {
+        debugLog("Like dislike segment found, creating button", buttonLikeDislikeSegment);
+        hideOriginalDownloadButton();
+        const downloadButton = document.createElement("button");
+        downloadButton.id = "downloadButton";
+        downloadButton.innerHTML = `${buttonSvgInnerHtml}<span>Download</span>`;
+        downloadButton.onclick = () => displayPopup(window.location.href);
+        buttonLikeDislikeSegment.insertAdjacentElement("afterend", downloadButton);
+      }
+    }
+  }
+
+  function hideOriginalDownloadButton() {
+    const originalDownloadButton = document.querySelector("#flexible-item-buttons ytd-download-button-renderer");
+    if (originalDownloadButton) {
+      originalDownloadButton.style.display = "none";
+      debugLog("Original download button hidden", originalDownloadButton);
+    }
+  }
+
+  function setThemeAttributeToHtml() {
+    const isDark = window.getComputedStyle(document.documentElement).getPropertyValue("background-color") === "rgb(15, 15, 15)";
+    if (isDark) {
+      document.documentElement.setAttribute("darky", "");
+    } else {
+      document.documentElement.setAttribute("lighty", "");
     }
   }
 
   function addCustomButton() {
-    const path = window.location.pathname;
+    debugLog("Checking for watch or clip page");
+    if (!window.location.pathname.includes("/watch") && !window.location.pathname.includes("/clip")) return;
+    debugLog("Watch or clip page detected, looking for container");
 
-    if (!(path.startsWith("/watch") || path.startsWith("/clip"))) return;
-
-    const containers = Array.from(document.querySelectorAll("#flexible-item-buttons")).filter((container) => container.children.length > 1);
-    containers.forEach((container) => {
-      // Skip if custom button already exists
-      if (container.querySelector("#custom-download-button")) return;
-
-      // Hide default download button if exists
-      const existingButton = container.querySelector("ytd-download-button-renderer");
-      if (existingButton) existingButton.style.display = "none";
-
-      // Create the custom button
-      const customButton = document.createElement("button");
-      customButton.id = "custom-download-button";
-      customButton.textContent = "Download";
-      customButton.onclick = () => displayPopup(window.location.href);
-      container.insertBefore(customButton, container.firstChild);
-    });
+    const interval = setInterval(() => {
+      const container = document.querySelector("ytd-watch-metadata #top-level-buttons-computed");
+      if (container) {
+        // Skip if custom button already exists
+        if (container.querySelector("#downloadButton")) return;
+        createButton(container);
+        clearInterval(interval);
+      }
+    }, 100);
   }
 
-  const observer = new MutationObserver(addCustomButton);
-  observer.observe(document.body, { childList: true, subtree: true });
+  const downloadButtonObserver = new MutationObserver(addCustomButton);
+  downloadButtonObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
 
+  // Initial call to set theme attribute
+  setThemeAttributeToHtml();
   // Initial call to add the custom button
   addCustomButton();
 })();
