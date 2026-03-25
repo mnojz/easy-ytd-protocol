@@ -33,8 +33,8 @@ The script automatically chooses the best available format if you request a high
 The extension modifies the YouTube interface:
 
 - Hides the original download button
-- Adds a custom **Download** button (no icon)
-- Clicking it opens a small popup with format options
+- Adds a custom **Download** button
+- Custom button opens small download popup
 
 | Original button                                                                                                                 | Injected button                                                                                                                 |
 | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
@@ -46,74 +46,26 @@ The extension modifies the YouTube interface:
 
 ## ![download menu](https://raw.githubusercontent.com/mnojz/easy-ytd-protocol/refs/heads/main/screenshots/downloadMenu.png)
 
-## Setup Guide
-
-### Prerequisites
-
-1. **Python**
-   - on linux pyhon3 is preinstalled in most cases.
-     ```bash
-     sudo apt install python3
-     ```
-
-2. **yt-dlp**
-   - **yt-dlp** binary is required to be side by side of **ytd.py**
-
-     ```bash
-     sudo wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O ~/.local/bin/yt-dlp && sudo chmod a+rx ~/.local/bin/yt-dlp
-     ```
-
-3. **FFmpeg**
-   - For **Ubuntu** based distros.
-     ```bash
-     sudo add-apt-repository ppa:ubuntuhandbook1/ffmpeg8
-     sudo apt update
-     sudo apt install ffmpeg
-     ```
-   - For **Arch** based distros.
-     ```bash
-     sudo pacman -S ffmpeg
-     ```
-
-### Verify installation:
-
-```bash
-yt-dlp --version
-ffmpeg -version
-```
-
-If both commands show version info, you’re ready.
-
 ## Installation
 
-1. **Set up the `ytd://` protocol**
-   - Ccopy `ytd-handler.desktop` to `~/.local/share/applications/`
-   - run this command in terminal
+### Arch based OS only
 
-     ```bash
-     xdg-mime default ytd-handler.desktop x-scheme-handler/ytd
-     ```
+```bash
+git clone --depth 1 https://github.com/mnojz/easy-ytd-protocol.git && cd easy-ytd-protocol && chmod +x install.sh && ./install.sh
+```
 
-   - to verify if the protocol is installed or not run this command
-     ```bash
-     xdg-mime query default x-scheme-handler/ytd
-     ```
-   - you will get result like this `ytd-handler.desktop`
+### Set up the browser extension
 
-2. **setup the downloader script**
-   - copy `ytd.py` to `~/.local/bin/`
+- Copy the `ydl` folder to your desired location.
 
-3. **Set up the browser extension**
-   - Copy the `ydl` folder to your desired location.
+- Open your Chromium-based browser → Extensions → Enable Developer mode → Load unpacked → Select the ydl folder. extension will get installed
 
-   - Open your Chromium-based browser → Extensions → Enable Developer mode → Load unpacked → Select the ydl folder. extension will get installed
+- Go to YouTube, open a video, refresh the page. You’ll see a Custom Download button next to the Share button.
 
-   - Go to YouTube, open a video, refresh the page. You’ll see a Download button (without icon) next to the Share button.
+- now you can download any video in any format
 
-   - now you can download any video in any format
-
-     NOTE: if you are using firefox you can download extension [here](https://addons.mozilla.org/en-US/firefox/addon/download-button-injector/)
-     firefox extension sometime dont inject the download button unless video page is refreshed. so chromium is recommanded.
+  NOTE: if you are using firefox you can download extension [here](https://addons.mozilla.org/en-US/firefox/addon/download-button-injector/)
+  firefox extension sometime dont inject the download button unless video page is refreshed. so chromium is recommanded.
 
 ---
 

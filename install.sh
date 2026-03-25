@@ -4,7 +4,7 @@ set -e
 
 echo -e "\e[34m==================[ YTD-Installer ]===================\e[0m"
 echo " ===> installing dependencies ...            "
-sudo pacman -S --needed --noconfirm yt-dlp ffmpeg
+sudo pacman -S --needed --noconfirm yt-dlp ffmpeg python3
 echo " ===> dependencies installed ...\n"
 
 echo -e "\e[34m==================[ Copying files ]===================\e[0m"
