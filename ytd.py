@@ -2,7 +2,6 @@
 
 import os
 import sys
-import time
 import yt_dlp
 import subprocess
 from urllib.parse import parse_qs, urlparse
