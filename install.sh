@@ -15,7 +15,8 @@ echo " ===> files copied ...\n"
 echo -e "\e[34m===========[ Generating URL handler file ]============\e[0m"
 
 SCRIPT_PATH="$HOME/.local/bin/ytd.py"
-
+mkdir -p $HOME/.local/share/applications
+touch $HOME/.local/share/applications/ytd-handler.desktop
 echo "[Desktop Entry]
 Name=YTD
 Type=Application
