@@ -1,34 +1,47 @@
 #!/bin/bash
+set -euo pipefail
 
-set -e 
+section() {
+    echo -e "\n\e[34m==================[ $1 ]===================\e[0m"
+}
 
-echo -e "\e[34m==================[ YTD-Installer ]===================\e[0m"
-echo " ===> installing dependencies ...            "
-sudo pacman -S --needed --noconfirm yt-dlp ffmpeg python3
-echo " ===> dependencies installed ...\n"
+section "Installing dependencies"
+sudo pacman -S --needed --noconfirm yt-dlp ffmpeg python
 
-echo -e "\e[34m==================[ Copying files ]===================\e[0m"
-mkdir -p $HOME/.local/bin
-cp ytd.py ~/.local/bin/
-echo " ===> files copied ...\n"
+section "Installing script"
 
-echo -e "\e[34m===========[ Generating URL handler file ]============\e[0m"
+SCRIPT_DIR="$HOME/.local/bin"
+SCRIPT_PATH="$SCRIPT_DIR/ytd.py"
 
-SCRIPT_PATH="$HOME/.local/bin/ytd.py"
-mkdir -p $HOME/.local/share/applications
-touch $HOME/.local/share/applications/ytd-handler.desktop
-echo "[Desktop Entry]
+mkdir -p "$SCRIPT_DIR"
+
+if [ -f "./ytd.py" ]; then
+    cp "./ytd.py" "$SCRIPT_PATH"
+    chmod +x "$SCRIPT_PATH"
+else
+    echo "[ERROR] ytd.py not found in current directory"
+    exit 1
+fi
+
+section "Creating desktop handler"
+
+DESKTOP_FILE="$HOME/.local/share/applications/ytd-handler.desktop"
+mkdir -p "$(dirname "$DESKTOP_FILE")"
+
+cat > "$DESKTOP_FILE" <<EOF
+[Desktop Entry]
 Name=YTD
 Type=Application
-Exec=/usr/bin/python3 $SCRIPT_PATH %u
+Exec=/usr/bin/env python3 $SCRIPT_PATH %u
 StartupNotify=false
-MimeType=x-scheme-handler/ytd;" > $HOME/.local/share/applications/ytd-handler.desktop
+MimeType=x-scheme-handler/ytd;
+EOF
 
-echo " ===> URL handler file generated ..."
+section "Registering MIME handler"
 
 xdg-mime default ytd-handler.desktop x-scheme-handler/ytd
+update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
 
-echo " ===> URL handler set ...\n"
+section "Done"
 
-echo -e "\e[31m==================[ Important ]===================\e[0m"
-echo -e "\e[31myou have to install browser extension manually\e[0m"
+echo -e "\e[31mRemember: browser extension must be installed manually\e[0m"
