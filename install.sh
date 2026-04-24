@@ -45,7 +45,7 @@ else
     ICON_PATH=""
 fi
 
-section "Creating URL handler"
+log "Creating URL handler"
 
 DESKTOP_FILE="$HOME/.local/share/applications/ytd-handler.desktop"
 mkdir -p "$(dirname "$DESKTOP_FILE")"
@@ -60,11 +60,14 @@ MimeType=x-scheme-handler/ytd;
 Icon=$ICON_PATH
 EOF
 
-section "Registering MIME handler"
+log "Desktop entry created at $DESKTOP_FILE"
+log "Registering MIME handler"
 
 xdg-mime default ytd-handler.desktop x-scheme-handler/ytd
 update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
 
-section "Done"
+log "MIME handler registered for ytd:// URLs"
 
-echo -e "\e[31mRemember: browser extension must be installed manually\e[0m"
+echo -e "\e[31m browser extension must be installed manually \e[0m"
+
+log "Installation complete! You can now use ytd:// URLs to download videos with yt-dlp."
