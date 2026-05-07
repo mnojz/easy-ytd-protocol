@@ -44,7 +44,7 @@ The extension modifies the YouTube interface:
 
 ### download popup
 
-## ![download menu](https://raw.githubusercontent.com/mnojz/easy-ytd-protocol/refs/heads/main/screenshots/downloadMenu.png)
+## ![download menu](https://raw.githubusercontent.com/mnojz/ytd-protocol/refs/heads/main/screenshots/downloadMenu.png)
 
 ## Installation
 
