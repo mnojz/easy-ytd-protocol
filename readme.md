@@ -38,7 +38,7 @@ The extension modifies the YouTube interface:
 
 | Original button                                                                                                                 | Injected button                                                                                                                 |
 | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| ![original download button](https://raw.githubusercontent.com/mnojz/easy-ytd-protocol/refs/heads/main/screenshots/original.png) | ![injected download button](https://raw.githubusercontent.com/mnojz/easy-ytd-protocol/refs/heads/main/screenshots/injected.png) |
+| ![original download button](https://raw.githubusercontent.com/mnojz/ytd-protocol/refs/heads/main/screenshots/original.png) | ![injected download button](https://raw.githubusercontent.com/mnojz/ytd-protocol/refs/heads/main/screenshots/injected.png) |
 
 ---
 
